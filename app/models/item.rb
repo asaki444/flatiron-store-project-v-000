@@ -11,6 +11,11 @@ class Item < ActiveRecord::Base
   def convert_price
       "$#{self.price.to_f/100}"
   end
+  def self.available_items
+     self.all.select do |item|
+      item.any_left?
+    end
+  end
 
   def any_left?
      self.inventory > 0

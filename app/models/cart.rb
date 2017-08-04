@@ -1,3 +1,4 @@
+require 'pry'
 class Cart < ActiveRecord::Base
   belongs_to :user
   has_many :line_items
@@ -8,14 +9,24 @@ class Cart < ActiveRecord::Base
     self.line_items.each do |line_items|
        price << line_items.item.price * line_items.quantity
     end
-      price.sum.to_f/100
+      price.sum
   end
 
    def cart_checkout
     self.status = "submitted"
     update_items
   end
-
+  
+  def add_item(id)
+    line_item = LineItem.find_by(item_id: id)
+    if !line_item
+      LineItem.new(item_id: id, quantity: 1, cart_id: self.id)
+    else
+      line_item.quantity += 1
+      line_item
+    end
+  end
+  
   def update_items
     if self.status == "submitted"
     self.line_items.each do |line_item|
@@ -25,4 +36,5 @@ class Cart < ActiveRecord::Base
       end
     end   
   end 
+
 end
