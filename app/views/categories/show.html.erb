@@ -2,7 +2,11 @@
 
 <ul>
 <% @category.items.each do |item| %>
-    <li><%= link_to item.title, item_path(item) %></li>
-    
+    <li><%= link_to item.title, item_path(item) %><br>
+            $<%= item.price.to_f/100 %>
+    </li>
+        <% if user_signed_in? %>
+            <%= button_to "Add to Cart", line_items_path %>
+        <% end %>
 <% end %>
 </ul>
